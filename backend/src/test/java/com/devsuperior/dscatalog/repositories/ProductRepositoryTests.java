@@ -18,13 +18,13 @@ public class ProductRepositoryTests {
 	@Autowired
 	private ProductRepository repository;
 	
-	private Long exintingId;
+	private Long existingId;
 	private Long nonExistingId;
 	private Long countTotalProducts;
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		exintingId = 1L;
+		existingId = 1L;
 		nonExistingId = 100L;
 		countTotalProducts = 25L;
 	}
@@ -32,13 +32,13 @@ public class ProductRepositoryTests {
 	@Test
 	public void findByIdShouldReturnNonEmptyOptionalWhenIdExists() {
 		
-		Optional<Product> result = repository.findById(exintingId);
+		Optional<Product> result = repository.findById(existingId);
 		
 		Assertions.assertTrue(result.isPresent());
 	}
 	
 	@Test
-	public void findByIdShouldReturnEmptyOptionaWhenIdDoesNotExist() {
+	public void findByIdShouldReturnEmptyOptionaWhenIdDoesNotExisting() {
 
 		Optional<Product> product = repository.findById(nonExistingId);
 		
@@ -61,15 +61,15 @@ public class ProductRepositoryTests {
 	@Test
 	public void deleteShouldDeleteObjectWhenIdExists() {
 		
-		repository.deleteById(exintingId);
+		repository.deleteById(existingId);
 		
-		Optional<Product> result = repository.findById(exintingId);
+		Optional<Product> result = repository.findById(existingId);
 		
 		Assertions.assertFalse(result.isPresent());
 	}
 	
 	@Test
-	public void deleteShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExist() {
+	public void deleteShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExisting() {
 		
 		Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
 			repository.deleteById(nonExistingId);
