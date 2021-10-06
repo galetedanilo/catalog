@@ -32,11 +32,11 @@ public class ProductResponse extends RepresentationModel<ProductResponse> implem
 	
 	private Instant date;
 	
-	private Instant creadted;
+	private Instant creaded;
 	
 	private Instant updated;
 	
-	private String imagUri;
+	private String imageUri;
 	
 	private Set<CategoryMinResponse> categories;
 }
