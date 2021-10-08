@@ -1,10 +1,11 @@
 package com.galete.catalog.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +45,7 @@ public class CategoryController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<CategoryResponse> addCategory(@Validated @RequestBody CategoryRequest request) {
+	public ResponseEntity<CategoryResponse> addCategory(@Valid @RequestBody CategoryRequest request) {
 		
 		CategoryResponse response = categoryService.addCategory(request);
 		
@@ -52,7 +53,7 @@ public class CategoryController {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id, @Validated @RequestBody CategoryRequest request) {
+	public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
 	
 		CategoryResponse response = categoryService.updateCategory(id, request);
 		
