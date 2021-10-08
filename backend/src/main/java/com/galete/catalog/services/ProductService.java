@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -44,7 +46,7 @@ public class ProductService implements Serializable {
 		
 		Optional<Product> optional = productRepository.findById(id);
 		
-		Product entity = optional.orElseThrow(() -> new ResourceNotFoundException(""));
+		Product entity = optional.orElseThrow(() -> new ResourceNotFoundException("Resource not found id"));
 		
 		return productMapper.productToProductResponse(entity);
 	}
@@ -63,6 +65,24 @@ public class ProductService implements Serializable {
 		entity = productRepository.save(entity);
 		
 		return productMapper.productToProductResponse(entity);
+	}
+	
+	public ProductResponse updateProduct(Long id, ProductRequest request) {
+		
+		try {
+			Product entity = productRepository.getById(id);
+			
+			entity = productMapper.productRequestToProduct(request);
+			
+			entity.setId(id);
+			entity.setUpdated(Instant.now());
+			
+			entity = productRepository.save(entity);
+			
+			return productMapper.productToProductResponse(entity);
+		} catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Resource not found in database with id: " + id);
+		}
 	}
 	
 	public void deleteProduct(Long id) {
