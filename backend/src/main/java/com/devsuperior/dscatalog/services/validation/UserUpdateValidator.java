@@ -14,7 +14,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import com.devsuperior.dscatalog.dto.UserUpdateDTO;
 import com.devsuperior.dscatalog.entities.User;
 import com.devsuperior.dscatalog.repositories.UserRepository;
-import com.devsuperior.dscatalog.resources.exceptions.FieldMessage;
+import com.devsuperior.dscatalog.controllers.exceptions.FieldMessage;
 
 public class UserUpdateValidator implements ConstraintValidator<UserUpdateValid, UserUpdateDTO> {
 	

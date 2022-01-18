@@ -1,15 +1,25 @@
 package com.devsuperior.dscatalog.tests;
 
-import java.time.Instant;
-
 import com.devsuperior.dscatalog.dto.ProductDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
 
+import java.time.Instant;
+import java.util.HashSet;
+
 public class Factory {
 
 	public static Product createProduct() {
-		Product product = new Product(1L, "Phone", "Good Phone", 800.0, "https://img.com/img.png", Instant.parse("2020-10-20T03:00:00Z"));
+		Product product = Product.builder()
+				.id(1L)
+				.name("Phone")
+				.description("Good Phone")
+				.price(800.0)
+				.imgUrl("https://img.com/img.png")
+				.date(Instant.parse("2020-10-20T03:00:00Z"))
+				.categories(new HashSet<>())
+				.build();
+
 		product.getCategories().add(createCategory());
 		
 		return product;
@@ -22,6 +32,11 @@ public class Factory {
 	}
 	
 	public static Category createCategory() {
-		return new Category(1L, "Electronic");
+		return Category.builder()
+				.id(1L)
+				.name("Electronic")
+				.createdAt(Instant.now())
+				.updatedAt(Instant.now())
+				.build();
 	}
 }

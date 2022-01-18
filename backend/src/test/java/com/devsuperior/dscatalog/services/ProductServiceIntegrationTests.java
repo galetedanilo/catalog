@@ -36,7 +36,7 @@ public class ProductServiceIntegrationTests {
 	}
 	
 	@Test
-	public void findAllPagedShoulReturnSortedPageWhenShortByName() {
+	public void findAllPagedShouldReturnSortedPageWhenShortByName() {
 		
 		PageRequest page = PageRequest.of(0, 10, Sort.by("name"));
 		
