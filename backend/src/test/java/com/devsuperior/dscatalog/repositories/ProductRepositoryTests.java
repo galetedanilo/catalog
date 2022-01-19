@@ -30,7 +30,7 @@ public class ProductRepositoryTests {
 	}
 	
 	@Test
-	public void findByIdShouldReturnNonEmptyOptionalWhenIdExists() {
+	public void findProductByPrimaryKeyShouldReturnNonEmptyOptionalWhenIdExists() {
 		
 		Optional<Product> result = repository.findById(existingId);
 		
@@ -38,7 +38,7 @@ public class ProductRepositoryTests {
 	}
 	
 	@Test
-	public void findByIdShouldReturnEmptyOptionaWhenIdDoesNotExisting() {
+	public void findProductByPrimaryKeyShouldReturnEmptyOptionalWhenIdDoesNotExisting() {
 
 		Optional<Product> product = repository.findById(nonExistingId);
 		
@@ -46,7 +46,7 @@ public class ProductRepositoryTests {
 	}
 	
 	@Test
-	public void saveShouldPersistWithAutoincrementWhenIdIsNull() {
+	public void saveNewProductShouldPersistWithAutoincrementWhenIdIsNull() {
 		
 		Product product = Factory.createProduct();
 		product.setId(null);
@@ -59,7 +59,7 @@ public class ProductRepositoryTests {
 	}
 
 	@Test
-	public void deleteShouldDeleteObjectWhenIdExists() {
+	public void deleteProductShouldDeleteObjectWhenIdExists() {
 		
 		repository.deleteById(existingId);
 		
@@ -69,7 +69,7 @@ public class ProductRepositoryTests {
 	}
 	
 	@Test
-	public void deleteShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExisting() {
+	public void deleteProductcShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExisting() {
 		
 		Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
 			repository.deleteById(nonExistingId);

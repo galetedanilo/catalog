@@ -6,6 +6,7 @@ import com.devsuperior.dscatalog.services.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/categories")
+@RequestMapping(value = "/api/v1/categories")
 @AllArgsConstructor
 public class CategoryController {
 
@@ -25,7 +26,7 @@ public class CategoryController {
 				
 		Page<CategoryResponse> categoryResponsePage = categoryService.findAllCategories(pageable);
 		
-		return ResponseEntity.ok().body(categoryResponsePage);
+		return new ResponseEntity<>(categoryResponsePage, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/{id}")
@@ -55,8 +56,7 @@ public class CategoryController {
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteCategoryByPrimaryKey(@PathVariable Long id) {
 		categoryService.deleteCategoryByPrimaryKey(id);
-		
-		//retorna código HTTP 204: resposta deu certo corpo vazio
-		return ResponseEntity.noContent().build();
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

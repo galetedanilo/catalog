@@ -1,5 +1,8 @@
 package com.devsuperior.dscatalog.services;
 
+import com.devsuperior.dscatalog.repositories.ProductRepository;
+import com.devsuperior.dscatalog.responses.ProductResponse;
+import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,19 +13,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devsuperior.dscatalog.dto.ProductDTO;
-import com.devsuperior.dscatalog.repositories.ProductRepository;
-import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
-
 @SpringBootTest
 @Transactional
 public class ProductServiceIntegrationTests {
 	
 	@Autowired
-	private ProductService service;
+	private ProductService productService;
 	
 	@Autowired
-	private ProductRepository repository;
+	private ProductRepository productRepository;
 	
 	private Long existingId;
 	private Long nonExistingId;
@@ -36,52 +35,53 @@ public class ProductServiceIntegrationTests {
 	}
 	
 	@Test
-	public void findAllPagedShouldReturnSortedPageWhenShortByName() {
+	public void findAllProductsShouldReturnSortedPageWhenShortByName() {
 		
-		PageRequest page = PageRequest.of(0, 10, Sort.by("name"));
+		PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("name"));
 		
-		Page<ProductDTO> result = service.findAll("", 0L, page);
+		Page<ProductResponse> productResponsePage = productService.findAllProducts("", 0L, pageRequest);
 		
-		Assertions.assertFalse(result.isEmpty());
-		Assertions.assertEquals("Macbook Pro", result.getContent().get(0).getName());
+		Assertions.assertFalse(productResponsePage.isEmpty());
+
+		Assertions.assertEquals("Macbook Pro", productResponsePage.getContent().get(0).getName());
 	}
 	
 	@Test
-	public void findAllPagedShoulReturnEmptyPageWhenPageDoesNotExisting() {
+	public void findAllProductsShouldReturnEmptyPageWhenPageDoesNotExisting() {
 		
-		PageRequest page = PageRequest.of(50, 10);
+		PageRequest pageRequest = PageRequest.of(50, 10);
 		
-		Page<ProductDTO> result = service.findAll("", 0L, page);
+		Page<ProductResponse> productResponsePage = productService.findAllProducts("", 0L, pageRequest);
 		
-		Assertions.assertTrue(result.isEmpty());
+		Assertions.assertTrue(productResponsePage.isEmpty());
 	}
 	
 	@Test
-	public void findAllPagedShouldReturnPageWhenPageZeroSizeTen() {
+	public void findAllProductsShouldReturnPageWhenPageZeroSizeTen() {
 		
-		PageRequest page = PageRequest.of(0, 10);
+		PageRequest pageRequest = PageRequest.of(0, 10);
 		
-		Page<ProductDTO> result = service.findAll("", 0L, page);
+		Page<ProductResponse> productResponsePage = productService.findAllProducts("", 0L, pageRequest);
 		
-		Assertions.assertFalse(result.isEmpty());
-		Assertions.assertEquals(0, result.getNumber());
-		Assertions.assertEquals(10, result.getSize());
-		Assertions.assertEquals(countTotalProducts, result.getTotalElements());
+		Assertions.assertFalse(productResponsePage.isEmpty());
+		Assertions.assertEquals(0, productResponsePage.getNumber());
+		Assertions.assertEquals(10, productResponsePage.getSize());
+		Assertions.assertEquals(countTotalProducts, productResponsePage.getTotalElements());
 	}
 	
 	@Test
-	public void deleteShouldDeleteResourceWhenIdExists() {
+	public void deleteProductShouldDeleteResourceWhenIdExists() {
 		
-		service.delete(existingId);
+		productService.deleteProductByPrimaryKey(existingId);
 		
-		Assertions.assertEquals(countTotalProducts - 1, repository.count());
+		Assertions.assertEquals(countTotalProducts - 1, productRepository.count());
 	}
 	
 	@Test
-	public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExisting() {
+	public void deleteProductShouldThrowResourceNotFoundExceptionWhenIdDoesNotExisting() {
 		
 		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-			service.delete(nonExistingId);
+			productService.deleteProductByPrimaryKey(nonExistingId);
 		});
 	}
 

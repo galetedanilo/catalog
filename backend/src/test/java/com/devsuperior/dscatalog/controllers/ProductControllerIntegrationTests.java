@@ -1,10 +1,9 @@
 package com.devsuperior.dscatalog.controllers;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.devsuperior.dscatalog.requests.ProductRequest;
+import com.devsuperior.dscatalog.tests.Factory;
+import com.devsuperior.dscatalog.tests.TokenUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +14,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devsuperior.dscatalog.dto.ProductDTO;
-import com.devsuperior.dscatalog.tests.Factory;
-import com.devsuperior.dscatalog.tests.TokenUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ProductResouceIntegrationTests {
+public class ProductControllerIntegrationTests {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -52,16 +51,16 @@ public class ProductResouceIntegrationTests {
 	}
 	
 	@Test
-	public void updateShoulReturnProductDTOWhenIdExists() throws Exception {
+	public void updateProductShouldReturnProductDTOWhenIdExists() throws Exception {
 		
-		ProductDTO productDTO = Factory.createProductDTO();
+		ProductRequest productRequest = Factory.createProductRequest();
 		
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 		
-		String jsonBody = objectMapper.writeValueAsString(productDTO);
-		String expectedName = productDTO.getName();
+		String jsonBody = objectMapper.writeValueAsString(productRequest);
+		String expectedName = productRequest.getName();
 	
-		ResultActions result = mockMvc.perform(put("/products/{id}", existingId)
+		ResultActions result = mockMvc.perform(put("/api/v1/products/{id}", existingId)
 				.header("Authorization", "Bearer" + accessToken)
 				.content(jsonBody)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -73,15 +72,15 @@ public class ProductResouceIntegrationTests {
 	}
 	
 	@Test
-	public void updateShoulThrowNotFoundWhenIdDoesNotExisting() throws Exception {
+	public void updateProductShouldThrowNotFoundWhenIdDoesNotExisting() throws Exception {
 		
-		ProductDTO productDTO = Factory.createProductDTO();
+		ProductRequest productRequest = Factory.createProductRequest();
 		
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 		
-		String jsonBody = objectMapper.writeValueAsString(productDTO);
+		String jsonBody = objectMapper.writeValueAsString(productRequest);
 	
-		ResultActions result = mockMvc.perform(put("/products/{id}", nonExistingId)
+		ResultActions result = mockMvc.perform(put("/api/v1/products/{id}", nonExistingId)
 				.header("Authorization", "Bearer" + accessToken)
 				.content(jsonBody)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -91,9 +90,9 @@ public class ProductResouceIntegrationTests {
 	}
 	
 	@Test
-	public void findAllSholdReturnSortedPageWhenSortById()  throws Exception {
+	public void findAllProductsShouldReturnSortedPageWhenSortById()  throws Exception {
 		
-		ResultActions result = mockMvc.perform(get("/products?page=0&size=12&sort=name,asc")
+		ResultActions result = mockMvc.perform(get("/api/v1/products?page=0&size=12&sort=name,asc")
 				.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isOk());
