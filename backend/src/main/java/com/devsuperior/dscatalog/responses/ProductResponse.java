@@ -1,7 +1,6 @@
 package com.devsuperior.dscatalog.responses;
 
 import com.devsuperior.dscatalog.controllers.ProductController;
-import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
 import lombok.*;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +13,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @Setter
@@ -42,6 +40,9 @@ public class ProductResponse extends RepresentationModel<ProductResponse> implem
         this.imgUrl = product.getImgUrl();
         this.date = product.getDate();
 
+        product.getCategories()
+                .forEach(category -> this.categories.add(new CategoryResponse(category)));
+
         this.add(WebMvcLinkBuilder
                 .linkTo(WebMvcLinkBuilder.methodOn(ProductController.class).findProductByPrimaryKey(id))
                 .withSelfRel()
@@ -56,10 +57,5 @@ public class ProductResponse extends RepresentationModel<ProductResponse> implem
                 .linkTo(WebMvcLinkBuilder.methodOn(ProductController.class).findAllProducts(0L, "", PageRequest.of(0, 20)))
                 .withRel("Find all products")
         );
-    }
-
-    public ProductResponse(Product product, Set<Category> categories) {
-        this(product);
-        categories.forEach(category -> this.categories.add(new CategoryResponse(category)));
     }
 }

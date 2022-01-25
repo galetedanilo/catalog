@@ -50,7 +50,7 @@ public class ProductService implements Serializable {
 		
 		Product product = optionalProduct.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		
-		return new ProductResponse(product, product.getCategories());
+		return new ProductResponse(product);
 	}
 
 	@Transactional

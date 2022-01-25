@@ -50,7 +50,7 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ProductResponse> saeNewProduct(@Valid @RequestBody ProductRequest productRequest) {
+	public ResponseEntity<ProductResponse> saveNewProduct(@Valid @RequestBody ProductRequest productRequest) {
 		ProductResponse productResponse = productService.saveNewProduct(productRequest);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
